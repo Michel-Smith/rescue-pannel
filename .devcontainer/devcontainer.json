@@ -1,0 +1,53 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/ubuntu
+{
+	"name": "BCFD_Dev",
+	"workspaceFolder": "/workspace/BCFD",
+  	"workspaceMount": "source=remote-workspace,target=/workspace/BCFD,type=volume",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick an Ubuntu version: focal, bionic
+		"args": { "VARIANT": "focal" }
+	},
+
+	
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"php.validate.executablePath": "/usr/local/bin/php",
+		"terminal.integrated.shell.linux": "/bin/zsh",
+	},
+
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"felixfbecker.php-debug",
+		"bmewburn.vscode-intelephense-client",
+		"mrmlnc.vscode-apache",
+		"amiralizadeh9480.laravel-extra-intellisense",
+		"onecentlin.laravel-extension-pack",
+		"onecentlin.laravel5-snippets",
+		"jawandarajbir.react-vscode-extension-pack",
+		"walter-ribeiro.full-react-snippets",
+		"dsznajder.es7-react-js-snippets"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [8000,3000],
+	"portsAttributes": {
+		"8000": {
+			"label": "Hello Remote World",
+			"onAutoForward": "notify"
+		},
+		"3000": {
+			"label": "Hello Remote World",
+			"onAutoForward": "notify"
+		}
+	},
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	//"remoteUser": "vscode"
+}
