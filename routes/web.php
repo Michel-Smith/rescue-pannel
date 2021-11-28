@@ -8,11 +8,13 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PrimesController;
 use App\Http\Controllers\Rapports\PoudreTestController;
 use App\Http\Controllers\RemboursementsController;
 use App\Http\Controllers\Service\ModifierReqController;
 use App\Http\Controllers\Service\ServiceGetterController;
 use App\Http\Controllers\Service\ServiceSetterController;
+use App\Http\Controllers\Users\CredentialController;
 use App\Http\Controllers\VolController;
 use App\Http\Controllers\BlackCodes\BCController;
 use App\Http\Controllers\BlackCodes\BcEmbedController;
@@ -76,7 +78,7 @@ Route::get('/logout', function (){
    return redirect()->route('login');
 })->middleware('auth')->name('logout');
 //reset mdp view
-Route::get('/reset/*', [HomeController::class, 'getIndex'])->middleware('guest');
+Route::get('/reset', [HomeController::class, 'getIndex']);
 //send mail for reseset
 Route::get('/sendmail', [HomeController::class, 'getIndex'])->middleware('guest');
 
@@ -91,6 +93,9 @@ Route::put('/data/setstatus', [LayoutController::class, 'setservice']);
 Route::get('/data/annonces', [MainController::class, 'getAnnonces']);
 Route::put('/data/users/setdiscordId/{discordid}/{id}', [UserController::class, 'setDiscordId']);
 //Route::post('/data/check/maintenance')
+Route::get('/data/user/reset/send/{mail?}',  [CredentialController::class, 'sendResetMail']);
+Route::get('/pass/reset/token/{uuid}',[CredentialController::class,'tokenVerify']);
+Route::post('/data/user/reset/post',[CredentialController::class,'changepass'] );
 
 //Rapport management
 Route::get('/data/rapport/getforinter', [RapportController::class, 'getforinter']);
@@ -208,15 +213,24 @@ Route::delete('/data/user/bg/delete', [AccountController::class, 'deleteBgImg'])
 Route::get('/data/admin/grades/get', [UserGradeController::class, 'getAllGrades']);
 Route::put('/data/admin/grades/{perm}/{grade_id}', [UserGradeController::class, 'changePerm']);
 
-Route::post('/data/bug', [MainController::class, 'postBug']);
+// Primes
+Route::get('/data/primes/getall', [PrimesController::class, 'gelAllReqPrimes']);
+Route::get('/data/primes/getmy', [PrimesController::class, 'getMyReqPrimes']);
+Route::post('/data/primes/post', [PrimesController::class, 'addReqPrimes']);
+Route::put('/data/primes/accept/{id}',[PrimesController::class, 'acceptReqPrimes']);
+Route::put('/data/primes/refuse/{id}', [PrimesController::class, 'refuseReqPrimes']);
 
+
+//Temp upload
 Route::post('/data/tempupload', [FileController::class, 'uploadFile'])->middleware('auth');
 Route::put('/data/finish/tempupload/{uuid}', [FileController::class, 'endOffUpload'])->middleware('auth');
 Route::delete('/data/delete/tempupload', [FileController::class, 'deleteTempFile'])->middleware('auth');
 
+//Infos utils
 Route::get('/data/infosutils/get', [MainController::class, 'getUtilsInfos']);
 Route::put('/data/infosutils/put', [MainController::class, 'updateUtilsInfos']);
 
+//Errors & bug reporter
 Route::post('/data/front/errors', [ErrorsController::class, 'frontErrors']);
-
-Route::post('/tunnel', [ErrorsController::class, 'tunelSentry']);
+Route::any('/tunnel', [ErrorsController::class, 'tunelSentry']);
+Route::post('/data/bug', [MainController::class, 'postBug']);
