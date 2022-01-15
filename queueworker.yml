@@ -4,5 +4,5 @@ apps:
     name      : 'artisan-queue-worker'
     cwd       : '/usr/share/nginx/lscofd'
     args      : 'queue:work' # or queue:work
-    interpreter : 'php'
+    interpreter : 'php' #php
 
